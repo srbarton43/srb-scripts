@@ -1,0 +1,46 @@
+#!/Library/Frameworks/Python.framework/Versions/Current/bin/python3
+"""
+This script converts csv file into latex tabular environment
+
+It can be piped into pbcopy to be pasted into latex document
+"""
+import csv
+import argparse, pathlib
+from pathlib import Path
+
+parser = argparse.ArgumentParser(
+        prog="csv2latex",
+        description="Converts csv table to latex table",
+        )
+parser.add_argument('filename')
+parser.add_argument("-b", "--border", action='store_true', help="turns on borders (off by default)")
+args = parser.parse_args()
+
+filename = Path(args.filename)
+
+if not filename.exists() or not filename.suffix == ".csv":
+    print("This file does not exist or is not a .csv file")
+    raise SystemExit(1)
+
+with open(filename, encoding="utf-8-sig") as f:
+    try:
+        csvreader = csv.reader(f, delimiter=",")
+    except(e):
+        print(e)
+
+    lines = []
+    if args.border:
+        for row in csvreader:
+            lines.append(("\t & \t").join(row) + " \\\\ \hline")
+
+        lines.insert(0, "\\begin{tabular}{|l|l|l|l|l|}")
+        lines.insert(1, "\\hline")
+        lines.append("\\end{tabular}")
+    else:
+        for row in csvreader:
+            lines.append(("\t & \t").join(row) + " \\\\")
+
+        lines.insert(0, "\\begin{tabular}{lllll}")
+        lines.append("\\end{tabular}")
+
+    print("\n".join(lines))
