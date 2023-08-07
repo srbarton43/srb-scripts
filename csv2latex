@@ -32,15 +32,17 @@ with open(filename, encoding="utf-8-sig") as f:
     if args.border:
         for row in csvreader:
             lines.append(("\t & \t").join(row) + " \\\\ \hline")
+            cols = len(row)
 
-        lines.insert(0, "\\begin{tabular}{|l|l|l|l|l|}")
+        lines.insert(0, f"\\begin{{tabular}}{{{cols*'|l'+'|'}}}")
         lines.insert(1, "\\hline")
         lines.append("\\end{tabular}")
     else:
         for row in csvreader:
             lines.append(("\t & \t").join(row) + " \\\\")
+            cols = len(row)
 
-        lines.insert(0, "\\begin{tabular}{lllll}")
+        lines.insert(0, f"\\begin{{tabular}}{{{cols*'l'}}}")
         lines.append("\\end{tabular}")
 
     print("\n".join(lines))
