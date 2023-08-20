@@ -1,0 +1,11 @@
+#!/bin/bash
+### Script to clean screenshots
+
+clean_desktop() {
+  echo "###############" >> ~/.clean_desktop.log
+  date >> ~/.clean_desktop.log
+  find ~/Desktop -maxdepth 1 -name "*Screenshot*.png" -exec echo {} >> ~/.clean_desktop.log \; -exec trash {} \;
+}
+
+
+clean_desktop
