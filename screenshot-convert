@@ -1,0 +1,17 @@
+#!/Users/sbarton/.nix-profile/bin/fish
+
+echo "/------------------------------------------------------------\\"
+echo "|   Convert most recently airdropped image to a PNG format   |"
+echo "\\------------------------------------------------------------/"
+echo
+
+set -l filename $(ls -t ~/Downloads/*.heic ~/Downloads/*.HEIC | head -1)
+
+read -P "Enter a filename for the converted image (extension-less): " input;
+
+while not string length -q "$input"
+  read -P "Enter a filename for the converted image (extension-less): " input;
+end
+
+set -l output_fn (string join "" "$input" ".png")
+sips -1 -s format png "$filename" --out "$output_fn"
